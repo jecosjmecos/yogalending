@@ -38,13 +38,15 @@ window.addEventListener('DOMContentLoaded', function(){
         } 
     });
 
+
+
     // Таймер
     let today = new Date,
         tomorrow = new Date;
     
     tomorrow.setDate(today.getDate()+1);
 
-    let deadline = '2020-02-03';
+    let deadline = tomorrow;
 
     function getTimeRemaining(endtime){
         let t = Date.parse(endtime) - Date.parse(new Date()),
@@ -95,4 +97,33 @@ window.addEventListener('DOMContentLoaded', function(){
     }
 
     setClock('timer', deadline);
+
+
+    //Модальное окно
+
+    let more = document.querySelector('.more'),
+        overlay = document.querySelector('.overlay'),
+        close = document.querySelector('.popup-close'),
+        descriptionBtn = document.querySelectorAll('.description-btn')
+
+    function callModal(e){
+        e.addEventListener('click', function(){
+            overlay.style.display = "block";
+            this.classList.add('more-splash');
+            document.body.style.overflow = "hidden";
+        });
+    }
+
+    callModal(more);
+
+    for(let i = 0; i < descriptionBtn.length; i++){
+        callModal(descriptionBtn[i]);
+    }
+
+    close.addEventListener('click', function(){
+        overlay.style.display = "none";
+        more.classList.remove('more-splash');
+        document.body.style.overflow = "";
+    });
+
 });
