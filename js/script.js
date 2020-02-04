@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded', () => {
 
     'use strict';
 
@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', function(){
         tab = document.querySelectorAll('.info-header-tab');
 
     //Скрываем лишние элементы контента
-    function hideTabContent(a){
+    let hideTabContent = (a) => {
         for(let i = a; i < tabContent.length; i++){
             tabContent[i].classList.remove('show');
             tabContent[i].classList.add('hide');
@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', function(){
     hideTabContent(1);
 
     //Показываем определенную часть контента
-    function showTabContent(b){
+    let showTabContent = (b) => {
         if(tabContent[b].classList.contains('hide')){
             tabContent[b].classList.remove('hide');
             tabContent[b].classList.add('show');
@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 
     //Событие по клику на таб
-    info.addEventListener('click', function(event){
+    info.addEventListener('click', (event) => {
         let target = event.target;
 
         if(target && target.classList.contains('info-header-tab')) {
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     let deadline = tomorrow;
 
-    function getTimeRemaining(endtime){
+    let getTimeRemaining = (endtime) => {
         let t = Date.parse(endtime) - Date.parse(new Date()),
             seconds = Math.floor((t/1000) % 60),
             minutes = Math.floor((t/1000/60) % 60),
@@ -62,7 +62,7 @@ window.addEventListener('DOMContentLoaded', function(){
         }
     }
 
-    function setClock(id, endtime){
+    let setClock = (id, endtime) => {
         let timer = document.getElementById(id),
             hours = timer.querySelector('.hours'),
             minutes = timer.querySelector('.minutes'),
