@@ -126,4 +126,97 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = "";
     });
 
+    //Формы обратной связи
+
+    // 1) Создаем объект в котором будут состоять различные состояния нашего запроса
+    let message = {
+        loading: 'Загрузка...',
+        success: 'Спасибо. Скоро мы с Вами свяжемся',
+        failure: 'Что-то пошло не так...'
+    };
+
+    // 2) Получаем элементы со страницы с которыми мы будем работать
+    // Модальное окно
+    let formModal = document.querySelector('.main-form'),
+        inputModal = formModal.getElementsByTagName('input');
+
+    // 3)Создаем элемент на странице, который будет информировать о статусе отправки 
+    let statusMessage = document.createElement('div');
+    statusMessage.classList.add('status');
+
+    // 4) Вешаем события submit на форму
+    // Модальное окно
+    formModal.addEventListener('submit', (event)=>{
+        event.preventDefault(); // Отменяем стандарное поведение формы
+        formModal.appendChild(statusMessage); // Создаем в форме элемент для отображения статус сообщения
+
+        let request = new XMLHttpRequest(); //Создаем новый объект XMLHttpRequest
+
+        //Настраиваем запрос
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        let formData = new FormData(formModal); // Создаем новый объект FomData
+        request.send(formData); //отправляем запрос на сервер
+        console.log(formData);
+        //создаем событие которое будет наблюдать за состоянием нашего запроса
+        //добавляем сообщения о статусе
+        request.addEventListener('readystatechange', ()=>{
+            if(request.readyState < 4){
+                statusMessage.textContent = message.loading;
+            } else if(request.readyState == 4 && request.status == 200){
+                statusMessage.textContent = message.success;
+            } else {
+                statusMessage.textContent = message.failure;
+            }
+        });
+        
+        //Очищаем поля после отправки
+        for(let i = 0; i < inputModal.length; i++){
+            inputModal[i].value = '';
+        }
+    });
+
+    // Форма в футере
+    let formFooter = document.querySelector('#form'),
+        inputFooter = formFooter.getElementsByTagName('input');
+
+    // Форма в футере
+    formFooter.addEventListener('submit', (event)=>{
+        event.preventDefault(); // Отменяем стандарное поведение формы
+        formFooter.appendChild(statusMessage); // Создаем в форме элемент для отображения статус сообщения
+
+        let request = new XMLHttpRequest(); //Создаем новый объект XMLHttpRequest
+
+        //Настраиваем запрос
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(formFooter);
+        
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+
+        request.send(json);
+        
+        //создаем событие которое будет наблюдать за состоянием нашего запроса
+        //добавляем сообщения о статусе
+        request.addEventListener('readystatechange', ()=>{
+            if(request.readyState < 4){
+                statusMessage.textContent = message.loading;
+            } else if(request.readyState == 4 && request.status == 200){
+                statusMessage.textContent = message.success;
+            } else {
+                statusMessage.textContent = message.failure;
+            }
+        });
+        
+        //Очищаем поля после отправки
+        for(let i = 0; i < inputFooter.length; i++){
+            inputFooter[i].value = '';
+        }
+    });
 });
